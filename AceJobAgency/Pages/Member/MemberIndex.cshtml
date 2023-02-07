@@ -1,0 +1,42 @@
+﻿@page
+
+@using Microsoft.AspNetCore.DataProtection;
+@model AceJobAgency.Pages.Member.MemberIndexModel
+@{
+	var dataProtectionProvider = DataProtectionProvider.Create("EncryptData");
+	var protector = dataProtectionProvider.CreateProtector("entrenchedHowitzer");
+	var userNRIC = HttpContext.Session.GetString("NRIC");
+	var user = Model._memberService.GetAceJobUserByNRIC(userNRIC);
+
+}
+
+<div class="container mt-5">
+	<h1 class="mb-3">Greetings, @protector.Unprotect(user.FName) @protector.Unprotect(user.LName)! </h1>
+
+	<div class="row">
+
+		<div class="col-sm-6 col-md-12 col-lg-4">
+			<div class="mb-3">
+				<h3 >Gender</h3>
+				@if(protector.Unprotect(user.Gender) == "M") {
+					<p>Male</p>
+				}
+				else {
+					<p>Female</p>
+				}
+
+				<h3 >Date of Birth</h3>
+				<p>@protector.Unprotect(user.DOB)</p>
+			</div>
+		</div>
+
+		<div class="col-sm-6 col-md-12 col-lg-4">
+			<div class="mb-3">
+				<h3 >Description of me</h3>
+				<p style="font-size: 24px">@protector.Unprotect(user.Whoami)</p>
+			</div>
+		</div>
+				
+	
+	</div>
+</div>

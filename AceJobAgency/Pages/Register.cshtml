@@ -1,0 +1,217 @@
+﻿@page
+@model AceJobAgency.Pages.RegisterModel
+@{
+}
+
+<div class="container mt-5">
+
+	<div class="row justify-content-center align-items-center">
+
+		<div class="col-sm-12 col-md-12 col-lg-4">
+			<h1 class="mb-3">Register </h1>
+
+			<form method="post" enctype="multipart/form-data" asp-antiforgery="true">
+				<div asp-validation-summary="All" class="text-danger"></div>
+
+				<input type="hidden" id="RModelToken" asp-for="RModel.Token" />
+
+				<div class="mb-3">
+					<label class="form-label" asp-for="RModel.FName">First Name</label>
+					<input type="Text" asp-for="RModel.FName" class="form-control" />
+					<span asp-validaton-for="RModel.FName" class="text-danger"></span>
+				</div>
+
+				<div class="mb-3">
+					<label class="form-label" asp-for="RModel.LName">Last Name</label>
+					<input type="Text" asp-for="RModel.LName" class="form-control" />
+					<span asp-validaton-for="RModel.LName" class="text-danger"></span>
+				</div>
+
+				<div class="mb-3">
+					<label class="form-label" asp-for="RModel.Gender">Gender</label>
+					<div class="form-check form-check-inline">
+						@Html.RadioButtonFor(m => m.RModel.Gender, "M",
+						new {@class = "form-check-input"})
+						<label class="form-check-label">Male</label>
+					</div>
+					<div class="form-check form-check-inline">
+						@Html.RadioButtonFor(m => m.RModel.Gender, "F",
+						new {@class = "form-check-input"})
+						<label class="form-check-label">Female</label>
+					</div>
+					<span asp-validaton-for="RModel.Gender" class="text-danger"></span>
+				</div>
+
+				<div class="mb-3">
+					<label class="form-label" asp-for="RModel.NRIC">NRIC</label>
+					<input type="Text" asp-for="RModel.NRIC" class="form-control" />
+					<span asp-validaton-for="RModel.NRIC" class="text-danger"></span>
+				</div>
+
+				<div class="mb-3">
+					<label class="form-label" asp-for="RModel.Email">Email Address</label>
+					<input type="Text" asp-for="RModel.Email" class="form-control" />
+					<span asp-validaton-for="RModel.Email" class="text-danger"></span>
+				</div>
+
+				<div class="mb-3">
+					<label class="form-label" asp-for="RModel.Password">Password</label>
+					<ul id="pwdchecker" style="display:none">
+						<li style="display:none"></li>
+						<li style="display:none"></li>
+						<li style="display:none"></li>
+						<li style="display:none"></li>
+						<li style="display:none"></li>
+					</ul>
+					<input id="pwd" type="password" asp-for="RModel.Password" class="form-control" onkeyup="validate()" />
+					<span id="pwdstrength" style="display:none">Password strength: </span><span id="strengthScore"></span>
+					<span asp-validaton-for="RModel.Password" class="text-danger"></span>
+				</div>
+
+				<div class="mb-3">
+					<label class="form-label" asp-for="RModel.ConfirmPassword">Confirm Password</label>
+					<input type="password" asp-for="RModel.ConfirmPassword" class="form-control" />
+					<span asp-validaton-for="RModel.ConfirmPassword" class="text-danger"></span>
+				</div>
+
+				<div class="mb-3">
+					<label class="form-label" asp-for="RModel.DOB">Date of Birth</label>
+					<input type="date" asp-for="RModel.DOB" class="form-control" />
+					<span asp-validaton-for="RModel.DOB" class="text-danger"></span>
+				</div>
+
+				<div class="mb-3">
+					<label class="form-label" asp-for="Resume">Resume</label>
+					<input type="file" accept=".docx,.pdf" asp-for="Resume" class="form-control"/>
+					<span asp-validaton-for="RModel.Resume" class="text-danger"></span>
+				</div>
+
+				<div class="mb-3">
+					<label class="form-label" asp-for="RModel.Whoami">Who am I?</label>
+					<input type="text" asp-for="RModel.Whoami" class="form-control" />
+					<span asp-validaton-for="RModel.Whoami" class="text-danger"></span>
+				</div>
+
+				<div class="mb-3">
+					<button type="submit" class="btn btn-primary">Register</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<script src="https://www.google.com/recaptcha/api.js"></script>
+
+<script src="https://www.google.com/recaptcha/api.js?render=6LdhElUkAAAAAFCEv8eKQXuQlaeF5TLv4zIlFMwj"></script>
+
+<script type="text/javascript">
+	function validate() {
+		var pwd = document.getElementById("pwd").value;
+		var pwdchecker = document.getElementById("pwdchecker");
+		var pwdcheckerList = document.getElementById("pwdchecker").getElementsByTagName("li");
+		var pwdstrength = document.getElementById("pwdstrength");
+		var pwdStrengthScore = document.getElementById("strengthScore");
+		
+		pwdchecker.style.display = "block";
+		pwdstrength.style.display = "inline";
+
+		var strengthScore = 0;
+
+		if (pwd.length < 12) {
+			pwdcheckerList[0].style.display = "list-item";
+			pwdcheckerList[0].style.color = "Red";
+			pwdcheckerList[0].innerHTML = "Password should contain at least 12 characters";
+		}
+		else {
+			pwdcheckerList[0].style.display = "none";
+			pwdcheckerList[0].innerHTML = "";
+			strengthScore += 1;
+		}
+		if (pwd.search(/[0-9]/) == -1) {
+			pwdcheckerList[1].style.display = "list-item";
+			pwdcheckerList[1].style.color = "Red";
+			pwdcheckerList[1].innerHTML = "Password should have at least 1 number";
+		}
+		else {
+			pwdcheckerList[1].style.display = "none";
+			pwdcheckerList[1].innerHTML = "";
+			strengthScore += 1;
+		}
+		if (pwd.search(/[A-Z]/) == -1) {
+			pwdcheckerList[2].style.display = "list-item";
+			pwdcheckerList[2].style.color = "Red";
+			pwdcheckerList[2].innerHTML = "Password should have at least 1 uppercase character";
+		}
+		else {
+			pwdcheckerList[2].style.display = "none";
+			pwdcheckerList[2].innerHTML = "";
+			strengthScore += 1;
+		}
+		if (pwd.search(/[a-z]/) == -1) {
+			pwdcheckerList[3].style.display = "list-item";
+			pwdcheckerList[3].style.color = "Red";
+			pwdcheckerList[3].innerHTML = "Password should have at least 1 lowercase character";
+		}
+		else {
+			pwdcheckerList[3].style.display = "none";
+			pwdcheckerList[3].innerHTML = "";
+			strengthScore += 1;
+		}
+		if (pwd.search(/[`!@@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/) == -1) {
+			pwdcheckerList[4].style.display = "list-item";
+			pwdcheckerList[4].style.color = "Red";
+			pwdcheckerList[4].innerHTML = "Password should have at least 1 special character";
+		}
+		else {
+			pwdcheckerList[4].style.display = "none";
+			pwdcheckerList[4].innerHTML = "";
+			strengthScore += 1;
+		}
+		
+		switch(strengthScore) {
+			case 1:
+				pwdStrengthScore.style.color = "Red";
+				pwdStrengthScore.innerHTML = "Very Weak";
+				break;
+			case 2:
+				pwdStrengthScore.style.color = "Orange";
+				pwdStrengthScore.innerHTML = "Weak";
+				break;
+			case 3:
+				pwdStrengthScore.style.color = "#FEDE00";
+				pwdStrengthScore.innerHTML = "Good";
+				break;
+			case 4:
+				pwdStrengthScore.style.color = "Green";
+				pwdStrengthScore.innerHTML = "Very Good";
+				break;
+			case 5:
+				pwdStrengthScore.style.color = "Blue";
+				pwdStrengthScore.innerHTML = "Strong";
+				break;
+			default:
+				pwdStrengthScore.style.color = "Red";
+				pwdStrengthScore.innerHTML = "Very Weak";
+		}
+	}
+	
+	function getToken() {
+		grecaptcha.ready(function () {
+			grecaptcha.execute('6LdhElUkAAAAAFCEv8eKQXuQlaeF5TLv4zIlFMwj', { action: 'submit' }).then(function (token) {
+
+				document.getElementById("RModelToken").value = token;
+			});
+		});
+	}
+	setInterval(getToken, 115000);
+
+	getToken(function () {
+		getToken();
+	});
+</script>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
